@@ -1,5 +1,8 @@
 output/
 captures/
+tests/Diagnosedateien/
+tests/Diagnosedaten/
 __pycache__/
 node_modules/
 .DS_Store
+.playwright-cli/

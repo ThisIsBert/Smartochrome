@@ -1,4 +1,21 @@
-# Prüfung · Smartochrome 0.1.0
+# Prüfung · Smartochrome 0.2.0
+
+Stand: 3. November 2026. Reale S22-Ultra-Bildfolgen aus Version 0.1 liegen lokal vor; ein realer Flächenversuch mit Version 0.2 steht noch aus.
+
+## Version 0.2
+
+- Neun Node-Tests und Syntaxprüfungen bestanden: bisherige ZIP-/Diagnoseprüfungen plus fünfzeilige Flächenbahn, stetiger Führungsverlauf, quadratischer und begrenzter Schärfebereich in Hoch-/Querformat.
+- Zwölf Python-Tests bestanden: acht für Registrierung, Vorwärts-/Rückwärtsverfolgung, Ausreißer und Zweitiefenszene; vier für variable Öffnung, wiederholte Positionen, symmetrische Flächengewichtung und Ablehnung einer Linie als Flächenöffnung.
+- Geführte Aufnahme mit künstlichem Kamerastream in Edge bei 412 px Breite geprüft: Aufnahme erst nach Markierung möglich; Festhalten der Kameraeinstellungen deaktiviert; Flächenmodus erzwingt mindestens acht Sekunden; Countdown und Aufnahmephase sichtbar verschieden.
+- Vollständige achtsekündige Rasterfolgen gespeichert, Vorschau geöffnet und ZIP heruntergeladen (63 beziehungsweise 68 Bilder in zwei Durchläufen). Der ZIP-Prüfer bestätigte CRCs, Bildzahl, JPEG-Abmessungen und Zeitstempel. Normierter Schärfebereich, Vergleichsreihenkennung und nicht gemessene Rastervorgabe sind im Manifest enthalten. Keine manuellen Kamerasteuerungsversuche protokolliert.
+- Abbruch während des Countdowns erzeugt keine zusätzliche Sitzung. „Weiter“ wählt den nächsten Vergleich ohne sofortige Aufnahme. Offline-Neuladen erhält App und gespeicherte Bildfolge. Kein horizontaler Überlauf bei 412 px, keine JavaScript-Seitenfehler, keine externen Foto-/Netzwerkanfragen im PWA-Test.
+- Lokaler HTTP-Dienst mit einer realen 52-Bild-Folge geprüft: alle Bilder ausgerichtet; Vorschau mit zwei verschiedenen Öffnungen; JPEG-Export in Originalauflösung. Eine kleinere Öffnung verwendet weniger Blickpunkte. Unautorisierter Zugriff auf die private API liefert HTTP 403.
+- Vollständiger Bedienweg der lokalen Oberfläche im Browser mit einer realen 52-Bild-Folge geprüft: Bereiche übernehmen, Ausrichtung starten, Öffnungsgröße und Randgewichtung ändern, Vorschau vergleichen und JPEG in voller Auflösung herunterladen. Eine Flächenöffnung für die horizontale Folge wird verständlich abgelehnt; danach bleibt die Linienöffnung bedienbar. Zu kleine Bereiche werden abgelehnt. Mobile und Desktopansichten wurden visuell geprüft; keine JavaScript-Seitenfehler.
+- Programmcode wird über eine explizite Dateiliste veröffentlicht. Private ZIPs, Bilder, Auswertungen, Browserprofile und Testartefakte sind ausgeschlossen.
+
+Die Browserprüfung verwendet einen künstlichen Kamerastream und ist keine neue Messung der Aufnahmeleistung auf dem S22 Ultra. Die bisherigen realen horizontalen Folgen liefern etwa 10–10,5 gespeicherte Bilder/s bei 720 × 1280 Pixeln. Die neue Rasterführung und deren optische Wirkung müssen noch am Gerät geprüft werden. Eine unkalibrierte Bildparallaxenkoordinate ist keine gemessene Kameraposition; die Gewichtung behauptet keine physikalische Blendenzahl.
+
+## Vorherige Prüfung · Version 0.1.0
 
 Stand: 3. November 2026. Noch keine reale Aufnahme auf dem Samsung S22 Ultra.
 

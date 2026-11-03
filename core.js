@@ -1,4 +1,4 @@
-export const VERSION='0.1.0';
+export const VERSION='0.2.0';
 export const MODES={stationary:'Stillhalten',horizontal:'Seitlich',disk:'Fläche',diagnostic:'Kameratest'};
 export function percentile(values,p){if(!values.length)return null;const a=[...values].sort((x,y)=>x-y);return a[Math.min(a.length-1,Math.floor((a.length-1)*p))];}
 export function cleanSettings(settings){const out={};for(const [k,v]of Object.entries(settings||{}))if(!['deviceId','groupId'].includes(k))out[k]=v;return out;}
