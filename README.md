@@ -30,6 +30,8 @@ Für einen ersten Versuch mit einer festen Schärfeebene ist eine vollständige 
 
 ## Lokale Oberfläche am Rechner
 
+Die lokale Oberfläche prüft jetzt Öffnungsabdeckung und dominante Positionsgewichte und bietet Vorschläge für den Schärfebereich. Bedienung und experimentelle Qualitätsgrenzen: [QUALITAET_AUSWERTUNG.md](QUALITAET_AUSWERTUNG.md). Unzureichend abgedeckte Öffnungen werden abgelehnt; vorhandene Bilder werden dadurch nicht automatisch verbessert.
+
 1. ZIPs in `Smartochrome/captures` ablegen. Vorhandene Versuche in `tests/Diagnosedateien` werden ebenfalls angezeigt.
 2. Unter Windows **`START_AUSWERTUNG.cmd`** doppelklicken. Es öffnet sich `http://127.0.0.1:8024/` im Browser. Das Konsolenfenster während der Arbeit geöffnet lassen; Strg+C beendet den Dienst.
 3. Eine Bildfolge auswählen. Im mittleren Bild einen kleinen Schärfebereich und einen strukturierten Bereich im weiter entfernten Hintergrund markieren. Klicken setzt ein Quadrat, Ziehen ein Rechteck; alternativ lassen sich Pixelkoordinaten eingeben. Die PWA-Markierung ist eine Vorschlagposition aus dem Livebild und muss am mittleren Bild geprüft werden.

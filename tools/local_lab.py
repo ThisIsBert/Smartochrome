@@ -12,6 +12,8 @@ import webbrowser
 import zipfile
 from PIL import Image
 from lab_engine import analyze,render
+from aperture_quality import recommend
+from region_quality import suggest
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -43,11 +45,11 @@ class Lab:
     def start(self,operation,payload):
         with self.lock:
             if self.busy:raise ValueError('Eine Berechnung läuft bereits. Bitte warten.')
-            if operation=='analyze':
+            if operation in ('analyze','suggest'):
                 path=self.captures.get(payload.get('captureId'))
                 if path is None:raise ValueError('Bildfolge nicht gefunden. Liste aktualisieren.')
                 boxes=[]
-                for key in ('roi','backgroundRoi'):
+                for key in (('roi',) if operation=='suggest' else ('roi','backgroundRoi')):
                     box=payload.get(key)
                     if not isinstance(box,list) or len(box)!=4 or any(not isinstance(v,(int,float)) for v in box):raise ValueError('Bitte beide Bildbereiche markieren.')
                     box=[round(v) for v in box]
@@ -57,14 +59,17 @@ class Lab:
                 job={'id':job_id,'state':'running','message':'Auswertung startet …','path':str(path),'folder':str(folder)}
                 self.jobs[job_id]=job
                 def work():
-                    job['report']=analyze(path,*boxes,folder,lambda message:job.update(message=message))
+                    if operation=='suggest':job['suggestions']=suggest(path,boxes[0],lambda message:job.update(message=message))
+                    else:job['report']=analyze(path,*boxes,folder,lambda message:job.update(message=message))
             else:
                 job=self.jobs.get(payload.get('analysisId'))
                 if job is None or 'report' not in job:raise ValueError('Zuerst Bildfolge ausrichten.')
                 aperture=float(payload.get('aperture',1));taper=float(payload.get('taper',1));area=bool(payload.get('area',False));full=bool(payload.get('full',False))
                 if not .2<=aperture<=1 or not 0<=taper<=1:raise ValueError('Ungültige Öffnung oder Randgewichtung.')
                 job_id=job['id'];job.update(state='running',message='Vollauflösung berechnen …' if full else 'Vorschau berechnen …')
-                def work():job['result']=render(job['path'],job['folder'],aperture,taper,area,full)
+                def work():
+                    if operation=='recommend':job['recommendation']=recommend(job['report']['trajectory']['alignedBackgroundOffsets'],taper,area)
+                    else:job['result']=render(job['path'],job['folder'],aperture,taper,area,full)
             self.busy=True
         def worker():
             try:work();job.update(state='done',message='Berechnung abgeschlossen.')
@@ -118,7 +123,7 @@ def handler_for(lab):
             try:
                 size=int(self.headers.get('Content-Length','0'))
                 if size<1 or size>32768:raise ValueError('Ungültige Anfragegröße.')
-                payload=json.loads(self.rfile.read(size));operation={'/api/analyze':'analyze','/api/render':'render'}[urlparse(self.path).path]
+                payload=json.loads(self.rfile.read(size));operation={'/api/analyze':'analyze','/api/render':'render','/api/recommend':'recommend','/api/suggest':'suggest'}[urlparse(self.path).path]
                 self.send(lab.start(operation,payload))
             except (ValueError,KeyError,TypeError) as e:self.send({'error':str(e)},code=400)
     return Handler
